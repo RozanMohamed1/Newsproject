@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iti/cubit/news_cubit_cubit.dart';
+import 'package:iti/cubit/news_cubit_state.dart';
 import '../widgets/category_item.dart';
 import '../widgets/news_item.dart';
 
@@ -48,6 +51,26 @@ class HomeScreen extends StatelessWidget {
                   ],
                 ),
               ),
+               BlocBuilder<NewsCubit, NewsCubitState>(
+  builder: (context, state) {
+    if (state is NewsCubitLoading) {
+      return const Center(child: CircularProgressIndicator());
+    } else if (state is NewsCubitSuccess) {
+      return ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: state.newlist.length,
+        itemBuilder: (context, i) => ListTile(
+          title: Text(state.newlist[i].title ?? "No title"),
+          subtitle: Text(state.newlist[i].desc ?? "No description"),
+        ),
+      );
+    } else if (state is NewsCubitFailure) {
+      return Center(child: Text(state.errorMessage ?? "Something went wrong"));
+    }
+    return const SizedBox.shrink();
+  },
+),
 
               const NewsItem(
                 title: "Issue 1: Ohio vote delivers win for abortion rights supporters",
