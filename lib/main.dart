@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iti/cubit/news_cubit_cubit.dart';
+import 'package:iti/services/newsServices.dart';
 import 'screens/home_screen.dart';
 
 
 void main() {
-  runApp(const MyApp());
-
+  runApp(
+    BlocProvider(
+      create: (context) => NewsCubit(NewsService()),
+      child: const MyApp(),
+    ),
+  );
 }
+
 
 
 
